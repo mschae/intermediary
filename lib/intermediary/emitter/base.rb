@@ -5,15 +5,14 @@ module Intermediary
         attr_accessor :routing_key
       end
 
-      attr_reader :object, :href, :id
+      attr_reader :object, :href
 
       def initialize(object)
         @object = object
-        @href   = generate_href
       end
 
       def routing_key
-        [self.class.routing_key, id].join(".")
+        href.gsub(%r(^http://), '').gsub('.', '_').gsub('/', '.')
       end
 
       def emit(event)
@@ -25,9 +24,7 @@ module Intermediary
       end
 
       def payload
-        object.attributes.merge(
-          href: href
-        )
+        object.attributes
       end
     end
   end

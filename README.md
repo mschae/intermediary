@@ -32,13 +32,15 @@ As explained above, gem provides two elements to exchange updates between apps:
 - The emitter
 - The listener
 
+### The Emitter
+
 To use the emitter one simply inherits from `Intermediary::Emitters::Base` as
 follows:
 
 ```ruby
 class MyEmitter < Intermediary::Emitters::Base
   def href
-
+    # Some fance href generation...
   end
 end
 ```
@@ -49,7 +51,7 @@ it can be customized by overwriting it.
 The href method always has to be supplied to indicate how to construct the
 routing key.
 
-Per default the payload emitted is the the object's `.to_attributes` and the
+Per default the payload emitted is the the object's `.attributes` and the
 event.
 
 ### The Listener
@@ -81,12 +83,14 @@ To register a listener, please call the following (e.g. in an initializer):
 Intermediary::Listeners.register MyListener
 ```
 
-Alternatively one can define a `self.on_error` method with takes one argument:
-The error itself. It will get called when processing a job failed.
+Additionally one can define a `self.on_error` method with takes one argument:
+The error itself. It will get called when processing a job failed. Feel free
+to pass it to your favorite error tracker.
 
-### Emitter
+**Pro tip**
 
-
+If you want to share the same `on_error` handler amongst multiple listeners,
+how about using a module, eh?
 
 ## Contributing
 
