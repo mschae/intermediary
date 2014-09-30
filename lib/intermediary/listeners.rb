@@ -34,10 +34,10 @@ module Intermediary
       listener.instance_variable_set :@channel, channel
 
       channel.
-        queue(queue_name, auto_delete: true).
-        bind(Connection.exchange, routing_key: routing_key).
-        subscribe(consumer_tag: self.consumer_tag,
-                  ack: true) do |delivery_info, properties, payload|
+        queue(queue_name).
+        bind(Connection.exchange, :routing_key => routing_key).
+        subscribe(:consumer_tag => self.consumer_tag,
+                  :ack => true) do |delivery_info, properties, payload|
           payload = ActiveSupport::JSON.decode(payload).with_indifferent_access
           begin
             listener.act(payload, delivery_info, properties)

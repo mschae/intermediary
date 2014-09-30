@@ -12,14 +12,18 @@ module Intermediary
       end
 
       def routing_key
-        href.gsub(%r(^http://), '').gsub('.', '_').gsub('/', '.')
+        href.
+          gsub(%r(\.\w{3,4}$), "").
+          gsub(%r(^http://), "").
+          gsub(".", "_").
+          gsub("/", ".")
       end
 
       def emit(event)
         Intermediary::Connection.exchange.publish(
-          payload.merge(event: event).to_json,
-          routing_key: routing_key,
-          content_type: 'application/json'
+          payload.merge(:event => event).to_json,
+          :routing_key  => routing_key,
+          :content_type => "application/json"
         )
       end
 
