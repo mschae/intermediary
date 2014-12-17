@@ -10,7 +10,7 @@ module Intermediary
       end
 
       def exchange
-        channel.topic "intermediary.topicexchange"
+        channel.create_channel.topic "intermediary.topicexchange"
       end
     end
   end
